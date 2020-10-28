@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <h1>Movie Bar - One Stop Movie Solution</h1>
-    <div v-show="!isSearching" class="pages-controll">
+    <div v-show="!isSearching" class="pages-control">
     <button :disabled="pageNum - 1 <= 0 ? true : false" @click="changePage(pageNum-1)">Prev Page</button><p>Page {{pageNum}}</p><button @click="changePage(pageNum+1)">Next Page</button>
     </div>
     <search-bar></search-bar>
@@ -60,11 +60,12 @@ body {
   background-color: rgba(245, 245, 245, 0.658);
   height: 100vh;
 }
-.pages-controll {
+.pages-control {
     display: flex;
     flex-direction: row;
     justify-content: center;
   }
+
 h1, button {
   text-align: center;
   margin: 0;
@@ -85,5 +86,9 @@ button {
 }
 li {
   list-style: none;
+}
+.pages-control p {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 </style>
