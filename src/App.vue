@@ -1,7 +1,9 @@
 <template>
   <div id="app">
-    <h1>Movie Bar - One Stop Movie Solution</h1>
-    <div v-show="!isSearching" class="pages-control">
+    <h1 @click="resetApp">Movie Bar - One Stop Movie Solution</h1>
+    <!-- <button >HOME</button> -->
+    <!-- <div v-show="!isSearching" class="pages-control"> -->
+    <div class="pages-control">
     <button :disabled="pageNum - 1 <= 0 ? true : false" @click="changePage(pageNum-1)">Prev Page</button><p>Page {{pageNum}}</p><button @click="changePage(pageNum+1)">Next Page</button>
     </div>
     <search-bar></search-bar>
@@ -25,8 +27,20 @@ export default {
     // },
     changePage(pageTo) {
       this.pageNum = pageTo;
-      this.isSearching ? null : this.$store.dispatch('fetchMovie', this.pageNum)
-    }
+      if(!this.isSearching) {
+        this.$store.dispatch('fetchMovie', this.pageNum)
+      }else {
+        this.$store.dispatch('searchMovie', {
+          searched: this.$store.state.currentSearch,
+          page: this.pageNum
+         })
+      }
+    },
+    resetApp() {
+      this.$store.dispatch('fetchMovie');
+      this.$store.dispatch('backToHome');
+      this.pageNum = 1;
+    },
   },
   computed: {
       nowPlaying() {
@@ -70,6 +84,7 @@ h1, button {
   text-align: center;
   margin: 0;
   font-family: 'Staatliches', cursive;
+  cursor: pointer;
 }
 h1 {
   padding-top: 20px;

@@ -8,6 +8,7 @@ const store = new Vuex.Store({
     state: {
       movieList: {},
       isSearching: false,
+      currentSearch: '',
     },
     mutations: {
       addMovies(state, movie) { //yang mana state yg mau diubah, apa yang jadi payloadnya
@@ -16,6 +17,9 @@ const store = new Vuex.Store({
       searchMovie(state, searchRes) {
         state.movieList = searchRes;
         state.isSearching = true;
+      },
+      unsearch(state) {
+        state.isSearching = false;
       }
     },
     actions: {
@@ -35,22 +39,28 @@ const store = new Vuex.Store({
                 
  
         },
-        searchMovie({commit}, payload) {
-          const modifiedPayload = payload.split(' ').join('%20'); //because screw u regex lul
+        searchMovie({commit, state}, {searched, page = 1}) {
+          state.currentSearch = searched;
+          console.log(state.currentSearch)
+          const modifiedPayload = state.currentSearch.split(' ').join('%20'); //because screw u regex lul atau pake encodeURI()
           console.log(modifiedPayload);
-          if(payload === '') {
-            axios('https://api.themoviedb.org/3/movie/now_playing?api_key=21059414113068a2e3b8e2e21349cb28&language=en-US&page=1')
+          if(state.currentSearch === '') {
+            axios(`https://api.themoviedb.org/3/movie/now_playing?api_key=21059414113068a2e3b8e2e21349cb28&language=en-US&page=${page}`)
                 .then(movieData => {
                   commit('addMovies', movieData.data)}) //melakukan commit pada nowPlaying
                 .catch(er => console.log(er))
           } else {
-            axios(`https://api.themoviedb.org/3/search/movie?api_key=21059414113068a2e3b8e2e21349cb28&language=en-US&query=${modifiedPayload}&page=1&include_adult=true`)
+            axios(`https://api.themoviedb.org/3/search/movie?api_key=21059414113068a2e3b8e2e21349cb28&language=en-US&query=${modifiedPayload}&page=${page}&include_adult=true`)
           .then(res => commit('searchMovie', res.data))
           .catch(er => console.log(er))
           }
           
           
+        },
+        backToHome({commit}) {
+          commit('unsearch')
         }
+
     }
   })
 

@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         userSearch() {
-            this.$store.dispatch('searchMovie', this.search)
+            this.$store.dispatch('searchMovie', {searched: this.search, page: 1})
             console.log(this.$store.state.movieList)
             //get the array of searched movies
             this.search = '';

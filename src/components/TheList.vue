@@ -4,7 +4,7 @@
       <li class="movie-card" v-for="movie in nowPlaying.results" :key="movie.id">
         <img class="movie-img" :src="`https://image.tmdb.org/t/p/w500/${movie.poster_path}`" :alt="movie.title" width="300px">
         <h2>{{movie.title}}</h2>
-        <p>Rating: {{movie.vote_average}}</p>
+        <p>Rating: {{!movie.vote_average ? 'N/A' : movie.vote_average}}</p>
       </li>
       
     </ul>
